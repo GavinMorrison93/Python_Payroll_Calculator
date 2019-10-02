@@ -1,0 +1,128 @@
+# Here I entered the Employee data, which consists of: first name, surname, date of start of employment, 
+# National Insurance Number, Tax credits and Gross annual wage.
+# All of the information entered is verified and then written to a text file entitled 'employees.txt'.
+# An option has also been included which allows the user to input the information of more than one employee.
+def getdata():
+   number = input ("How many items do you want to enter?")
+   employees = {}
+   for person in range( 0 , int(number)):
+      name = input("Name: ")
+      surname = input("Surname: ")
+      start = str(input('Date of commencement: '))
+      nin = str(input('National Insurance Number: '))
+      credits = str(input('Tax Credits: '))
+      wages = 0
+      wages = int(input("Gross Annual Salary: "))
+      employees[name] = wages
+   for name in employees:
+      print (name, surname, start, nin, credits, employees[name])
+   verify = input("Everything correct?")
+   if verify == 'y':
+      f = open('employees.txt', 'a')
+      for name in employees:
+         f.write ("{0} {1} {2} {3} {4} {5}\n".format(name, surname, start, nin, credits, employees[name]))
+      f.close()
+
+# Here are where all the wage calculations are done and all of the formatting to display the calculated output.
+def calculations():
+# Here are where we create the heading and category information that will be displayed when printed.
+   print("\n")
+   print('Year to date'"\t""\t""\t""\t""\t""\t""\t"'This month')
+   print('-----------------------------------------------------------+--------------------------------------------|')
+   print("Employee Name""\t"' Gross'"\t""\t"' Tax'"\t""\t"' Net'"\t""\t"' Gross'"\t""\t"' Tax'"\t""\t"' Net')
+   print('-----------------------------------------------------------+--------------------------------------------|')
+# Here are where the 'employees.txt' file are opened, a loop is created and the calculations are performed and given
+# a variable for processing later in the function.
+   with open('employees.txt', 'r') as inf:
+      for line in inf:
+        parts = line.split()
+        g = (parts[0])
+        f = (parts[1])
+        d = int(parts[4])
+        x = int(parts[5])
+        h = (x / 12)
+        m = (parts[2])
+        o = int(m[3:5])
+        b = (x / 100 * 20 - d)
+        e = (b / 12)                
+        j = (h - e)
+        y = (38800 / 100 * 20 - d)
+        z = (x % 38800 /100 * 41)
+        a = (y + z)
+        c = (a / 12)
+        k = (h - c)
+        s = (12 - o)
+        t = h
+        w = e
+        z = c
+        i = j
+        l = k
+# Here are where the calculations are printed for the first month, first for the employees earning under €38,800 per annum
+# and then for those employees earning above that amount. It is worth mentioning here that the displayed figures are rounded
+# to two decimal places but the calculations themselves are not rounded in the interest of accuracy.
+        if x <= 38800:
+          print(g, f,"\t", (round(h,2)),"\t", (round(e,2)),"\t", (round(j,2)),"\t", (round(h,2)),"\t", (round(e,2)),"\t", (round(j,2)))
+        elif x > 38800:
+          print(g, f,"\t", (round(h,2)),"\t", (round(c,2)),"\t", (round(k,2)),"\t", (round(h,2)),"\t", (round(c,2)),"\t", (round(k,2)))
+# Here more variables are created which are refinements of the variables above, and a while loop iterates through our employment records
+# an amount of times that corresponds with the length of time the employee has been working with our fictitious company. 
+        n = 0
+        while n <= s - 2:
+          t = t + h
+          w = w + e
+          z = z + c
+          i = i + j
+          l = l + k
+# Here are printed the calculations for the second and remaining months, first for our employees earning under €38,800 and then for those
+# earning over that amount.
+          if x <= 38800:
+            print("\t","\t", (round(t,2)),"\t", (round(w,2)),"\t", (round(i,2)),"\t", (round(h,2)),"\t", (round(e,2)),"\t", (round(j,2)))
+          else:
+            print("\t","\t", (round(t,2)),"\t", (round(z,2)),"\t", (round(l,2)),"\t", (round(h,2)),"\t", (round(c,2)),"\t", (round(k,2)))
+          n = n + 1
+# Here are printed the total amounts for our monthly and yearly records, first for our employees earning under €38,800 and then for those
+# earning over that amount.
+        print('-----------------------------------------------------------+--------------------------------------------|')
+        if x <= 38800:
+          print("Total","\t", "\t",(round(h * s,2)),"\t", (round(e * s,2)),"\t", (round(j * s,2)),"\t", (round(h * s,2)),"\t", (round(e * s,2)),"\t", (round(j * s,2)))
+        else:
+          print("Total","\t", "\t",(round(h * s,2)),"\t", (round(c * s,2)),"\t", (round(k * s,2)),"\t", (round(h * s,2)),"\t", (round(c * s,2)),"\t", (round(k * s,2)))
+        print("\n")
+   inf.close()
+
+# Here is a function designed to delete an Employee record from the 'employee.txt' file generated by this program.
+# The function works essentially by opening the text file, displaying the contents in a numbered list and asking for 
+# the number of the entry to be deleted. Once the entry to be removed has been selected the text file is opened again
+# and rewritten minus the selected entry.
+def erase():
+   contents = {}
+   f = open('employees.txt', 'a')
+   f.close()
+   f = open('employees.txt', 'r')
+   index = 0
+   for line in f:
+      index = index + 1
+      contents[index] = line
+      print ("{0:3d}) {1}".format(index,line))
+   f.close()
+   total = index
+   entry = int(input("Enter number to be deleted"))
+   f = open('employees.txt', 'w')
+   index = 0
+   for index in range(0,total):
+      index = index + 1
+      if index != entry:
+         f.write(contents[index])
+         
+# Here are the actions for the main menu which appears when my program is first opened, once a selection is made
+# from the menu, the corresponding function is opened or the program is exited.
+action = input("What do you want to do?\n\n a Add a new employee\n b Remove an employee\n c Calculate wages\n d Exit")
+if action == 'a':
+   getdata()
+if action =='b':
+   erase()
+if action =='c':
+   calculations()
+if action =='d':
+   exit()
+# End of program.
